@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.29;
 
-contract Basics {
+contract Vote {
     // адресс того, кто запутил контракт
     address public owner;
     // ["boba", "biba", "beba", "buba"] - кандидаты голосования

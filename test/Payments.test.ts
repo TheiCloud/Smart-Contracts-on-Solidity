@@ -13,7 +13,7 @@ describe("Payments", function () {
 
     return { user1, user2, payments };
   }
-    
+
   it("What should the test do", async function () {
     const { user1, user2, payments } = await loadFixture(deploy);
 
@@ -26,16 +26,25 @@ describe("Payments", function () {
   it("Balance equal 0?", async function () {
     const { user1, user2, payments } = await loadFixture(deploy);
 
-      payments.currentBalance()
-
+    payments.currentBalance();
   });
 
-  it("should be possible to send funds", async function() {
-    const {user1, user2, payments} = await loadFixture(deploy);
-    const sum = 100; //wei 
+  it("should be possible to send funds", async function () {
+    const { user1, user2, payments } = await loadFixture(deploy);
+    const sum = 100000000000000; //wei
     const msg = "hello from hardhat";
 
-    await payments.pay(msg, {value: sum});
-    const tx = await payments.connect(user2).pay(msg, {value: sum});
-  })
+    //console.log(await ethers.provider.getBalance(user1.address));
+    const tx = await payments.connect(user2).pay(msg, { value: sum });
+    //console.log(await ethers.provider.getBalance(user1.address));
+    //console.log(await ethers.provider.getBalance(user2.address));
+
+    await tx.wait(1);
+
+    await expect(tx).to.changeEtherBalance(user2, -sum);
+    const newPayment = await payments.getPayment(user2.address, 0)
+
+    expect(newPayment.timestamp)
+
+  });
 });
